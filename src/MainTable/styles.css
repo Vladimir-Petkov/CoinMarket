@@ -5,3 +5,15 @@
     margin-right:5%;
     margin-top: 2%;
 }
+
+.CriptoName {
+    color: blue;
+}
+
+.active{
+    color: green;
+}
+
+.normal{
+    color: red;
+}
