@@ -7,6 +7,8 @@ import { Sparklines, SparklinesCurve } from 'react-sparklines';
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 let data = [];
+let criptoId = [];
+let chartsPrice = {};
 
 class MainTable extends React.Component {
     state = {
@@ -14,9 +16,21 @@ class MainTable extends React.Component {
     };
 
     componentDidMount() {
-        postService.load().then(posts => {
-            this.setState({ posts })
-        });
+        postService.loadData().then(posts => {
+            this.setState({ posts });
+
+            posts.map(m => criptoId.push(m.id));
+
+            for (const priceID of criptoId) {
+                postService.dataDiagrams(priceID, 7).then(m => { 
+                    m.prices.map(m => {
+                        if(!chartsPrice[priceID]) chartsPrice[priceID] = []
+                        chartsPrice[priceID].push(m[1]);
+                    });
+                    console.log(chartsPrice);
+                })
+            }
+        })
     }
 
 
@@ -34,12 +48,13 @@ class MainTable extends React.Component {
                         <th><a href='#Circulating_Supply'>Circulating Supply</a></th>
                         <th><a href='#24h_Volume'>24h Volume</a></th>
                         <th><a href='#Change_(24h)'>Change (24h)</a></th>
-                        <th><a href='#Last_24h'>Last 24h</a></th>
+                        <th><a href='#Price_Graph_(7d)'>Price Graph (7d)</a></th>
                     </tr>
                 </thead>
                 <tbody>
                     {Object.keys(posts).map((i) => {
                         data = posts[i];
+                        //makeCalls(data.id)
                         //console.log(data);
                         let color = data.market_data.market_cap_change_percentage_24h.toFixed(2) > 0 ?'green' : 'red';
                         return (
@@ -52,7 +67,7 @@ class MainTable extends React.Component {
                                 <td className='CriptoName'><NumberFormat value={data.market_data.total_volume.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                 <td className={color}>{data.market_data.market_cap_change_percentage_24h.toFixed(2)}%</td>
                                 <td>
-                                    <Sparklines data={[+data.market_data.high_24h.usd, +data.market_data.low_24h.usd]} width={164} height={48}>
+                                    <Sparklines data={criptoId} width={164} height={48}>
                                         <SparklinesCurve style={{ stroke: "orange", strokeWidth: "1", fill: "none" }} />
                                     </Sparklines>
                                 </td>
