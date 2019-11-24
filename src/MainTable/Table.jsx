@@ -4,7 +4,6 @@ import './styles.css';
 import postService from '../services/post-service';
 import NumberFormat from 'react-number-format';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
-import { BrowserRouter, Route, Link } from "react-router-dom";
 
 let data = [];
 let criptoId = [];
@@ -22,14 +21,16 @@ class MainTable extends React.Component {
             posts.map(m => criptoId.push(m.id));
 
             for (const priceID of criptoId) {
-                postService.dataDiagrams(priceID, 7).then(m => { 
+                postService.loadDiagrams(priceID, 7).then(m => {
                     m.prices.map(m => {
-                        if(!chartsPrice[priceID]) chartsPrice[priceID] = []
+                       if(!chartsPrice[priceID]) {
+                        chartsPrice[priceID] = [];
+                       }
                         chartsPrice[priceID].push(m[1]);
                     });
-                    console.log(chartsPrice);
                 })
             }
+            console.log(chartsPrice);
         })
     }
 
@@ -41,7 +42,7 @@ class MainTable extends React.Component {
             <Table className='table' hover>
                 <thead>
                     <tr>
-                        <th><a href='#'>#</a></th>
+                        <th><a href='#Number'>#</a></th>
                         <th><a href='#Name'>Name</a></th>
                         <th><a href='#Price'>Price</a></th>
                         <th><a href='#Market_Cap'>Market Cap</a></th>
@@ -54,9 +55,8 @@ class MainTable extends React.Component {
                 <tbody>
                     {Object.keys(posts).map((i) => {
                         data = posts[i];
-                        //makeCalls(data.id)
-                        //console.log(data);
-                        let color = data.market_data.market_cap_change_percentage_24h.toFixed(2) > 0 ?'green' : 'red';
+
+                        let color = data.market_data.market_cap_change_percentage_24h.toFixed(2) > 0 ? 'green' : 'red';
                         return (
                             <tr key={data.id}>
                                 <td>{data.market_data.market_cap_rank}</td>
@@ -67,7 +67,7 @@ class MainTable extends React.Component {
                                 <td className='CriptoName'><NumberFormat value={data.market_data.total_volume.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                 <td className={color}>{data.market_data.market_cap_change_percentage_24h.toFixed(2)}%</td>
                                 <td>
-                                    <Sparklines data={criptoId} width={164} height={48}>
+                                    <Sparklines data={[1, 5, 19]} width={164} height={48}>
                                         <SparklinesCurve style={{ stroke: "orange", strokeWidth: "1", fill: "none" }} />
                                     </Sparklines>
                                 </td>
