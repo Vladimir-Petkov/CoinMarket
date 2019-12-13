@@ -1,43 +1,64 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import './styles.css';
-import postService from '../services/post-service';
+import postService from '../Service/post-service';
 import NumberFormat from 'react-number-format';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
 let data = [];
-let criptoId = [];
-let chartsPrice = {};
+//let criptoId = [];
+//let chartsPrice = {};
 
 class MainTable extends React.Component {
-    state = {
-        posts: {}
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            posts: {},
+            chartsPrice: {},
+            criptoId: []
+        };
     };
 
     componentDidMount() {
         postService.loadData().then(posts => {
             this.setState({ posts });
 
-            posts.map(m => criptoId.push(m.id));
+            let cryptoIDs = posts.map((post) => post.id);
+            this.setState({ criptoId: cryptoIDs });
 
-            for (const priceID of criptoId) {
+            for (const priceID of this.state.criptoId) {
                 postService.loadDiagrams(priceID, 7).then(m => {
-                    m.prices.map(m => {
-                       if(!chartsPrice[priceID]) {
-                        chartsPrice[priceID] = [];
-                       }
-                        chartsPrice[priceID].push(m[1]);
-                    });
+                    this.setState({ chartsPrice: { ...this.state.chartsPrice, [priceID]: m.prices } })
                 })
             }
-            console.log(chartsPrice);
-        })
-    }
 
+        });
+
+        console.log(this.state.chartsPrice)
+    };
+
+    // componentDidUpdate() {
+    //     let chartsPrice = {};
+
+    //     for (const priceID of thcriptoId) {
+    //         postService.loadDiagrams(priceID, 7).then(m => {
+    //             m.prices.map(m => {
+    //                 if (!chartsPrice[priceID]) {
+    //                     chartsPrice[priceID] = [];
+    //                 }
+    //                 return chartsPrice[priceID].push(m[1])
+    //             })
+    //         });
+    //     }
+    // }
 
 
     render() {
         const { posts } = this.state;
+        let { chartsPrice } = this.state;
+        console.log(this.state.chartsPrice)
+
         return (
             <Table className='table' hover>
                 <thead>
@@ -55,6 +76,16 @@ class MainTable extends React.Component {
                 <tbody>
                     {Object.keys(posts).map((i) => {
                         data = posts[i];
+                        // let chartPrice = {};
+                        //debugger
+                        // postService.loadDiagrams(data.id, 7).then(m => {
+                        //     m.prices.map(m => {
+                        //         if(!chartPrice[data.id]) {
+                        //             chartPrice[data.id] = [];
+                        //         }
+                        //         return chartPrice[data.id].push(m[1])
+                        //     })
+                        // });
 
                         let color = data.market_data.market_cap_change_percentage_24h.toFixed(2) > 0 ? 'green' : 'red';
                         return (
@@ -73,7 +104,8 @@ class MainTable extends React.Component {
                                 </td>
                             </tr>
                         );
-                    })}
+                    })
+                    }
                 </tbody>
             </Table>
         );

@@ -7,7 +7,7 @@ function App() {
   return (
     <React.Fragment>
       <Navigation />
-        <h1 align="center">Top 50 Cryptocurrencies by Market Capitalization</h1>
+        <h5 align="center">Top 50 Cryptocurrencies by Market Capitalization</h5>
       <Table />
     </React.Fragment>
   )
