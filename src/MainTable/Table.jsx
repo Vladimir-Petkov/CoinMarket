@@ -5,10 +5,6 @@ import postService from '../Service/post-service';
 import NumberFormat from 'react-number-format';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
-let data = [];
-//let criptoId = [];
-//let chartsPrice = {};
-
 class MainTable extends React.Component {
     constructor(props) {
         super(props)
@@ -34,30 +30,11 @@ class MainTable extends React.Component {
             }
 
         });
-
-        console.log(this.state.chartsPrice)
     };
-
-    // componentDidUpdate() {
-    //     let chartsPrice = {};
-
-    //     for (const priceID of thcriptoId) {
-    //         postService.loadDiagrams(priceID, 7).then(m => {
-    //             m.prices.map(m => {
-    //                 if (!chartsPrice[priceID]) {
-    //                     chartsPrice[priceID] = [];
-    //                 }
-    //                 return chartsPrice[priceID].push(m[1])
-    //             })
-    //         });
-    //     }
-    // }
-
 
     render() {
         const { posts } = this.state;
-        let { chartsPrice } = this.state;
-        console.log(this.state.chartsPrice)
+        const { chartsPrice } = this.state;
 
         return (
             <Table className='table' hover>
@@ -70,24 +47,28 @@ class MainTable extends React.Component {
                         <th><a href='#Circulating_Supply'>Circulating Supply</a></th>
                         <th><a href='#24h_Volume'>24h Volume</a></th>
                         <th><a href='#Change_(24h)'>Change (24h)</a></th>
+                        <th><a href='#Change_(7d)'>Change (7d)</a></th>
                         <th><a href='#Price_Graph_(7d)'>Price Graph (7d)</a></th>
                     </tr>
                 </thead>
                 <tbody>
                     {Object.keys(posts).map((i) => {
-                        data = posts[i];
-                        // let chartPrice = {};
-                        //debugger
-                        // postService.loadDiagrams(data.id, 7).then(m => {
-                        //     m.prices.map(m => {
-                        //         if(!chartPrice[data.id]) {
-                        //             chartPrice[data.id] = [];
-                        //         }
-                        //         return chartPrice[data.id].push(m[1])
-                        //     })
-                        // });
+                        let data = posts[i];
+                        let priceFor7days = [];
+                        console.log(data)
+                        
+                        for (const key in chartsPrice) {
+                            if (key === data.id) {
+                                priceFor7days = [];
+                                for (const price of chartsPrice[key]) {
+                                    priceFor7days.push(price[1]);
+                                }
+                            }
+                            continue;
+                        }
 
                         let color = data.market_data.market_cap_change_percentage_24h.toFixed(2) > 0 ? 'green' : 'red';
+                        let colorCharts = data.market_data.price_change_percentage_7d.toFixed(2) > 0 ? 'green' : 'red';
                         return (
                             <tr key={data.id}>
                                 <td>{data.market_data.market_cap_rank}</td>
@@ -97,9 +78,10 @@ class MainTable extends React.Component {
                                 <td><NumberFormat value={data.market_data.circulating_supply} displayType={'text'} decimalScale={0} thousandSeparator={true} /></td>
                                 <td className='CriptoName'><NumberFormat value={data.market_data.total_volume.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                 <td className={color}>{data.market_data.market_cap_change_percentage_24h.toFixed(2)}%</td>
+                                <td className={colorCharts}>{data.market_data.price_change_percentage_7d.toFixed(2)}%</td>
                                 <td>
-                                    <Sparklines data={[1, 5, 19]} width={164} height={48}>
-                                        <SparklinesCurve style={{ stroke: "orange", strokeWidth: "1", fill: "none" }} />
+                                    <Sparklines data={priceFor7days} width={164} height={48}>
+                                        <SparklinesCurve style={{ stroke: [colorCharts], strokeWidth: "1", fill: "none" }} />
                                     </Sparklines>
                                 </td>
                             </tr>
