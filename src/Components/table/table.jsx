@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import './styles.css';
-import postService from '../Service/post-service';
+import postService from '../service/post-service';
 import NumberFormat from 'react-number-format';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
@@ -55,7 +55,6 @@ class MainTable extends React.Component {
                     {Object.keys(posts).map((i) => {
                         let data = posts[i];
                         let priceFor7days = [];
-                        console.log(data)
                         
                         for (const key in chartsPrice) {
                             if (key === data.id) {
@@ -72,7 +71,7 @@ class MainTable extends React.Component {
                         return (
                             <tr key={data.id}>
                                 <td>{data.market_data.market_cap_rank}</td>
-                                <td width="170"><img src={data.image.thumb} alt='' />{data.name}</td>
+                                <td width="170"><img src={data.image.thumb} alt='' /><a href={data.name}>{data.name}</a></td>
                                 <td className='CriptoName'><NumberFormat value={data.market_data.current_price.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                 <td><NumberFormat value={data.market_data.market_cap.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                 <td><NumberFormat value={data.market_data.circulating_supply} displayType={'text'} decimalScale={0} thousandSeparator={true} /></td>
