@@ -1,4 +1,4 @@
-import requester from './requester';
+import requester from '../../service/requester';
 
 const userController = function () {
 
@@ -39,22 +39,22 @@ const userController = function () {
 
                 window.location.pathname = '/';
             });
-        // console.log(data);
     };
 
-    // const logout = function (context) {
-    //     requester.post('_logout', 'user', 'Kinvey')
-    //         .then(requester.handler)
-    //         .then(() => {
-    //             sessionStorage.clear();
+    const logout = function (data) {
+        requester.post('_logout', 'user', 'Kinvey')
+            .then(requester.handler)
+            .then(() => {
+                sessionStorage.clear();
 
-    //             context.redirect('#/login');
-    //         });
-    // };
+                window.location.pathname = '/login';
+            });
+    };
+
     return {
         postRegister,
         postLogin,
-        // logout
+        logout
     }
 }();
 

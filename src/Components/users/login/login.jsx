@@ -21,7 +21,6 @@ export default function Login() {
 
       <div className="container signin">
         <p>Don't have an account? <a href="/register">Register</a>.</p>
-        <p className="psw">Forgot <a href="/repeatePassword">password?</a></p>
       </div>
     </form>
   );
