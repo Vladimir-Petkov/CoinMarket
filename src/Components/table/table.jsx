@@ -4,6 +4,7 @@ import './styles.css';
 import postService from '../service/post-service';
 import NumberFormat from 'react-number-format';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
+import { Link } from 'react-router-dom'
 
 class MainTable extends React.Component {
     constructor(props) {
@@ -74,18 +75,18 @@ class MainTable extends React.Component {
                             return (
                                 <tr key={data.id}>
                                     <td>{data.market_data.market_cap_rank}</td>
-                                    <td width="170"><img src={data.image.thumb} alt='' /><a href={data.name}>{data.name}</a></td>
+                                    <td width="170"><img src={data.image.thumb} alt='' /><Link to={`/details/${data.id}`}>{data.name}</Link></td>
                                     <td className='CriptoName'><NumberFormat value={data.market_data.current_price.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                     <td><NumberFormat value={data.market_data.market_cap.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                     <td><NumberFormat value={data.market_data.circulating_supply} displayType={'text'} decimalScale={0} thousandSeparator={true} /></td>
                                     <td className='CriptoName'><NumberFormat value={data.market_data.total_volume.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                     <td className={color}>{data.market_data.market_cap_change_percentage_24h.toFixed(2)}%</td>
                                     <td className={colorCharts}>{data.market_data.price_change_percentage_7d.toFixed(2)}%</td>
-                                    <td>
+                                    {/* <td>
                                         <Sparklines data={priceFor7days} width={164} height={48}>
                                             <SparklinesCurve style={{ stroke: [colorCharts], strokeWidth: "1", fill: "none" }} />
                                         </Sparklines>
-                                    </td>
+                                    </td> */}
                                 </tr>
                             );
                         })

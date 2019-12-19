@@ -11,6 +11,8 @@ import Details from './Components/details/details';
 import ContextWrapper from './ContextWrapper';
 // import Profile from './Components/users/profile/profile';
 import Terms from './Components/common/terms/terms';
+import FavoriteCoins from './Components/favoriteCoins/favoriteCoins';
+import Dashboard from './Components/dashboard/dashboard';
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,8 +29,10 @@ function App() {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
-          <Route path="/details" component={Details} />
+          <Route path="/details/:id" component={Details} />
           <Route path="/terms" component={Terms} />
+          <Route path="/favoriteCoins/:id" component={FavoriteCoins} />
+          <Route path="/dashboard" component={Dashboard} />
           {/* <Route path="/profile" component={Profile} /> */}
         </Switch>
       <Footer />
