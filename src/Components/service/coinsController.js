@@ -9,20 +9,12 @@ const coinController = function () {
 
         requester.post('coins', 'appdata', 'Kinvey', payload)
             .then(requester.handler)
-            .then((d) => {
+            .then(() => {
                 window.location.pathname = '/';
             });
     };
 
-    const getMyCoins = function () {
-
-        requester.get(`coins?query={"_acl.creator":"${sessionStorage.getItem('userId')}"}`, 'appdata', 'Kinvey')
-            .then(requester.handler)
-            .then((idea) => {
-                console.log(idea);
-                window.location.pathname = '/dashboard';
-            });
-    };
+    
 
     // const getEdit = function (context) {
     //     helper.addHeaderInfo(context);
@@ -125,7 +117,6 @@ const coinController = function () {
 
     return {
         postCreate,
-        getMyCoins,
         // getEdit,
         // postEdit,
         // getDelete,
