@@ -82,11 +82,11 @@ class MainTable extends React.Component {
                                     <td className='CriptoName'><NumberFormat value={data.market_data.total_volume.usd} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
                                     <td className={color}>{data.market_data.market_cap_change_percentage_24h.toFixed(2)}%</td>
                                     <td className={colorCharts}>{data.market_data.price_change_percentage_7d.toFixed(2)}%</td>
-                                    {/* <td>
+                                    <td>
                                         <Sparklines data={priceFor7days} width={164} height={48}>
                                             <SparklinesCurve style={{ stroke: [colorCharts], strokeWidth: "1", fill: "none" }} />
                                         </Sparklines>
-                                    </td> */}
+                                    </td>
                                 </tr>
                             );
                         })
